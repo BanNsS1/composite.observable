@@ -4,6 +4,7 @@ import java.util.Observable;
 
 public abstract class MachineComponent extends Observable{   
     protected int id;
+    protected boolean broken = false;
     
     public MachineComponent(int id){
         this.id = id;
@@ -22,8 +23,20 @@ public abstract class MachineComponent extends Observable{
         notifyObservers(this);
     }
     
-    public abstract void setBroken();
-    public abstract void repair();
+    public void setBroken(){
+        if(!broken){
+            broken = true;
+            notifyChanges();
+        }
+    }
+    
+    public void repair(){
+        if(broken){
+            broken = false;
+            notifyChanges();
+        }
+    }
+    
     public abstract boolean isBroken();
     public abstract void displayTree(int level);
 }

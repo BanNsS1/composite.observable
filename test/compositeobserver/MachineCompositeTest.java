@@ -18,24 +18,17 @@ import static org.junit.Assert.*;
  * @author BanNsS1
  */
 public class MachineCompositeTest {
-    
-    public MachineCompositeTest() {
-    }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
+    /**
+     * Test of setBroken method, of class MachineComposite.
+     */
+    @Test
+    public void testSetBroken() {
+        MachineComposite m1 = new MachineComposite(1);
+        boolean initial_status = m1.isBroken();
+        m1.setBroken();
+        boolean finale_status = m1.isBroken();
+        assertFalse(initial_status);
+        assertTrue(finale_status);
     }
 
     /**
@@ -43,24 +36,23 @@ public class MachineCompositeTest {
      */
     @Test
     public void testAddComponent() {
-        System.out.println("addComponent");
-        MachineComponent mc = null;
-        MachineComposite instance = null;
-        instance.addComponent(mc);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setBroken method, of class MachineComposite.
-     */
-    @Test
-    public void testSetBroken() {
-        System.out.println("setBroken");
-        MachineComposite instance = null;
-        instance.setBroken();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        //Broken component
+        MachineComposite m1 = new MachineComposite(1);
+        m1.setBroken();
+        //Working component
+        MachineComposite m2 = new MachineComposite(2);
+        
+        //Test the addition of a broken component.
+        MachineComposite m3 = new MachineComposite(3);
+        assertFalse(m3.isBroken());
+        m3.addComponent(m1);
+        assertTrue(m3.isBroken());
+        
+        //Test the adition of a working component.
+        MachineComposite m4 = new MachineComposite(4);
+        assertFalse(m4.isBroken());
+        m4.addComponent(m2);
+        assertFalse(m4.isBroken());        
     }
 
     /**
@@ -68,11 +60,45 @@ public class MachineCompositeTest {
      */
     @Test
     public void testRepair() {
-        System.out.println("repair");
-        MachineComposite instance = null;
-        instance.repair();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        //Simple case
+        MachineComposite m1 = new MachineComposite(1);
+        m1.setBroken();
+        assertTrue(m1.isBroken());
+        m1.repair();
+        assertFalse(m1.isBroken());
+        
+        //Complex case
+        MachineComposite m2 = new MachineComposite(2);
+        MachineComposite m3 = new MachineComposite(3);
+        MachineComposite m4 = new MachineComposite(4);
+        MachineComposite m5 = new MachineComposite(5);
+        MachineComposite m6 = new MachineComposite(6);
+        
+        // Tree: (Top) m6 - m5 - m4 - m3 - m2 (Bottom)
+        m3.addComponent(m2);
+        m4.addComponent(m3);
+        m5.addComponent(m4);
+        m6.addComponent(m5);
+        
+        //Breaking m2 (The last element of the tree)
+        m2.setBroken();
+        
+        //All the elements should be broken at this point
+        assertTrue(m6.isBroken());
+        assertTrue(m5.isBroken());
+        assertTrue(m4.isBroken());
+        assertTrue(m3.isBroken());
+        assertTrue(m2.isBroken());
+        
+        //Lets repair on m5
+        m5.repair();
+        
+        //All the elements should have been repaired
+        assertFalse(m6.isBroken());
+        assertFalse(m5.isBroken());
+        assertFalse(m4.isBroken());
+        assertFalse(m3.isBroken());
+        assertFalse(m2.isBroken());
     }
 
     /**

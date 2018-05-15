@@ -1,26 +1,9 @@
 package compositeobserver;
 
 public class Machine extends MachineComponent {
-    protected boolean broken = false;
     
     public Machine(int id){
         super(id);
-    }
-    
-    @Override
-    public void setBroken(){
-        if(!broken){
-            broken = true;
-            notifyChanges();
-        }
-    }
-       
-    @Override
-    public void repair(){
-        if(broken){
-            broken = false;
-            notifyChanges();
-        }
     }
     
     @Override

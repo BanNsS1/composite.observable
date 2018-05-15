@@ -6,11 +6,6 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-/*
- * Not using the instance variable 'broken' here because we're assuming a 
- * MachineComposite will be only broken if at least one of its components
- * is broken.
- */
 public class MachineComposite extends MachineComponent implements Observer{
     private final List<MachineComponent> components = new ArrayList<>();
     private final List<MachineComponent> brokenComponents = new ArrayList<>();
@@ -36,29 +31,23 @@ public class MachineComposite extends MachineComponent implements Observer{
     }
     
     @Override
-    public void setBroken(){
-        //breaking first element
-        components.get(0).setBroken();
-    }
-    
-    @Override
     public void repair(){
         if(isBroken()){
-            //Repairing a MachineComposite means repairing all its components
-            MachineComponent mc;
-            while(!brokenComponents.isEmpty()){
-                brokenComponents.get(0).repair();
-                //No need to move brokenComponents to components:
-                //This is observing its components so will notice about repairs itself.
-            }
+            this.broken = false;
+            if(!isBroken())
+                notifyChanges();
         }
+        //Repairing its components (no need to notify changes here).
+        MachineComponent mc;
+        while(!brokenComponents.isEmpty()){
+            brokenComponents.get(0).repair();
+        }
+        
     }
     
     @Override
     public boolean isBroken(){
-        if(brokenComponents.isEmpty())
-            return false;
-        return true;
+        return (!brokenComponents.isEmpty() || this.broken);
     }
 
     @Override

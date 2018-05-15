@@ -24,7 +24,7 @@ public class MachineTest {
     public void testSetBroken() {
         Machine machine = new Machine(1);
         machine.setBroken();
-        assertEquals(true, machine.isBroken());
+        assertTrue(machine.isBroken());
     }
 
     /**
@@ -41,7 +41,7 @@ public class MachineTest {
         
         //Machine is broken. Lets now test the repair.
         machine.repair();
-        assertEquals(false, machine.isBroken());
+        assertFalse(machine.isBroken());
     }
 
     /**
@@ -58,8 +58,8 @@ public class MachineTest {
         machine.repair();
         boolean repaired_status = machine.isBroken();
         
-        assertEquals(false, default_status);
-        assertEquals(true, broken_status);
-        assertEquals(false, repaired_status);
+        assertFalse(default_status);
+        assertTrue(broken_status);
+        assertFalse(repaired_status);
     }
 }
