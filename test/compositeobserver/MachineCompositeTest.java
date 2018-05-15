@@ -30,6 +30,16 @@ public class MachineCompositeTest {
         assertFalse(initial_status);
         assertTrue(finale_status);
     }
+    /**
+     * Test of isBroken method, of class MachineComposite.
+     */
+    @Test
+    public void testIsBroken() {
+        MachineComposite m1 = new MachineComposite(1);
+        assertFalse(m1.isBroken());
+        m1.setBroken();
+        assertTrue(m1.isBroken());
+    }
 
     /**
      * Test of addComponent method, of class MachineComposite.
@@ -102,44 +112,34 @@ public class MachineCompositeTest {
     }
 
     /**
-     * Test of isBroken method, of class MachineComposite.
-     */
-    @Test
-    public void testIsBroken() {
-        System.out.println("isBroken");
-        MachineComposite instance = null;
-        boolean expResult = false;
-        boolean result = instance.isBroken();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of update method, of class MachineComposite.
      */
     @Test
     public void testUpdate() {
-        System.out.println("update");
-        Observable o = null;
-        Object arg = null;
-        MachineComposite instance = null;
-        instance.update(o, arg);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of displayTree method, of class MachineComposite.
-     */
-    @Test
-    public void testDisplayTree() {
-        System.out.println("displayTree");
-        int level = 0;
-        MachineComposite instance = null;
-        instance.displayTree(level);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-    
+        MachineComposite m1 = new MachineComposite(1);
+        m1.setBroken();
+        MachineComposite m2 = new MachineComposite(2);
+        m2.addComponent(m1);
+        
+        //M2 should be broken since its child m1 is.
+        assertTrue(m2.isBroken());
+        
+        //Repairing M1 should update M2
+        m1.repair();
+        assertFalse(m2.isBroken());
+        
+        
+        
+        MachineComposite m3 = new MachineComposite(3);
+        MachineComposite m4 = new MachineComposite(4);
+        m4.addComponent(m3);
+        
+        //M4 shouldn't be broken
+        assertFalse(m4.isBroken());
+        
+        //Breaking M3 should update M4
+        m3.setBroken();
+        assertTrue(m4.isBroken());
+        
+    }    
 }
