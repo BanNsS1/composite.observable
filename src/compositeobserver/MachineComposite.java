@@ -31,9 +31,7 @@ public class MachineComposite extends MachineComponent implements Observer{
         
                 
         if(initial_status != isBroken()){
-            System.out.println("My status changed "+ this.getId());
-            setChanged();
-            notifyObservers(this);
+            notifyChanges();
         }
     }
     
@@ -49,8 +47,7 @@ public class MachineComposite extends MachineComponent implements Observer{
             //Repairing a MachineComposite means repairing all its components
             MachineComponent mc;
             while(!brokenComponents.isEmpty()){
-                mc = brokenComponents.get(0);
-                mc.repair();
+                brokenComponents.get(0).repair();
                 //No need to move brokenComponents to components:
                 //This is observing its components so will notice about repairs itself.
             }
@@ -69,18 +66,25 @@ public class MachineComposite extends MachineComponent implements Observer{
         boolean initial_status = isBroken();
         
         MachineComponent mc = (MachineComponent) arg;
-        if(mc.isBroken() && components.contains(mc)){
-            components.remove(mc);
-            brokenComponents.add(mc);
-        }else if(!mc.isBroken() && brokenComponents.contains(mc)){
-            brokenComponents.remove(mc);
-            components.add(mc);
-        }
+        
+        if(mc.isBroken() && components.contains(mc))
+            onComponentBreak(mc);
+        else if(!mc.isBroken() && brokenComponents.contains(mc))
+            onComponentFix(mc);
         
         if(initial_status != isBroken()){
-            setChanged();
-            notifyObservers(this);
+            notifyChanges();
         }
+    }
+    
+    private void onComponentFix(MachineComponent mc){
+        brokenComponents.remove(mc);
+        components.add(mc);
+    }
+    
+    private void onComponentBreak(MachineComponent mc){
+        components.remove(mc);
+        brokenComponents.add(mc);
     }
     
     @Override

@@ -11,8 +11,7 @@ public class Machine extends MachineComponent {
     public void setBroken(){
         if(!broken){
             broken = true;
-            setChanged();
-            notifyObservers(this);
+            notifyChanges();
         }
     }
        
@@ -20,8 +19,7 @@ public class Machine extends MachineComponent {
     public void repair(){
         if(broken){
             broken = false;
-            setChanged();
-            notifyObservers(this);
+            notifyChanges();
         }
     }
     

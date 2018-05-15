@@ -17,6 +17,11 @@ public abstract class MachineComponent extends Observable{
         return id;
     }
     
+    protected void notifyChanges(){
+        setChanged();
+        notifyObservers(this);
+    }
+    
     public abstract void setBroken();
     public abstract void repair();
     public abstract boolean isBroken();
